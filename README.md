@@ -21,7 +21,7 @@ All of the above steps can be performed using REST API calls via Postman.
 4. Use Postman or a similar tool to hit the endpoint **`/kafka/publish`** with a POST request to produce messages by sending the data and topicName as request body.
 5. You can consume messages ans insert it into specific tables by making a GET request to **`/kafka/consume`** and sending in the topicName , consumerID and tableName in the request body.
 6. KSQL queries can be performed with a POST request to **`/execute`**, sending a request body that includes the KSQL command and endpoint.
-7. KSQL queries can also be performed through KSQL CLI by connectint to the ksqlDB using command **`docker exec -it ksqldb-cli ksql http://ksqldb-server:8088`** in teh terminal and can enter the interactive command line and perform basic SQL queries . 
+7. KSQL queries can also be performed through KSQL CLI by connectint to the ksqlDB using command **`docker exec -it ksqldb-cli ksql http://ksqldb-server:8089`** in teh terminal and can enter the interactive command line and perform basic SQL queries . 
 
 ## **Technologies Used**
 
