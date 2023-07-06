@@ -17,25 +17,23 @@ import java.nio.charset.Charset
 
 // Defining a DataClass to be used in your Kafka messages
 
-data class transactions(val id : String , val status : String)
+data class transactions(val id : String , val status : String) // transaction details
 
-//@JsonNaming(PropertyNamingStrategies.UpperCamelCaseStrategy::class)
 data class DataClass(val key: String, val value: transactions) {
 
-    // Define a companion object to hold common properties across instances
     companion object {
-        // Create a Jackson Object Mapper, used for converting objects to/from JSON
+        // Creating a Jackson Object Mapper, used for converting objects to/from JSON
         val objectMapper = jacksonObjectMapper()
-        // Create a logger instance for logging events in this class
+        // logger
         val log : Logger = LoggerFactory.getLogger(DataClass::class.java)
     }
 
-    // Define a Serializer for DataClass. This will be used when producing messages to Kafka.
+    // Serializer for DataClass , used when producing messages to Kafka.
     class DataClassSerializer : Serializer<DataClass> {
         override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {}
         override fun close() {}
 
-        // Method for converting a DataClass to a byte array for transmission
+        //  converting a DataClass to a byte array for transmission
         override fun serialize(topic: String?, data: DataClass?): ByteArray {
             ByteArrayOutputStream().use { out ->
                 // Convert the DataClass to JSON and write to the ByteArrayOutputStream
@@ -44,30 +42,27 @@ data class DataClass(val key: String, val value: transactions) {
                 val bytes = out.toByteArray()
                 val jsonString = String(bytes , Charset.forName("UTF-8"))
                 log.info("Serialized data: $jsonString")
-                // Return the byte array
                 return out.toByteArray()
             }
         }
     }
 
 
-    // Define a Deserializer for DataClass. This will be used when consuming messages from Kafka.
+    // Deserializer for DataClass , used when consuming messages from Kafka.
     class DataClassDeserializer : Deserializer<DataClass> {
         override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {}
         override fun close() {}
 
-        // Method for converting a byte array to a DataClass
+        //  converting a byte array to a DataClass
         override fun deserialize(topic: String?, data: ByteArray?): DataClass {
             ByteArrayInputStream(data).use { input ->
                 var jsonString: String? =null
                 return try {
-                    // Convert the byte array to a string for logging
                     jsonString = data?.let { String(it, Charset.forName("UTF-8")) }
                     log.info("Deserializing: $jsonString")
                     // Convert the JSON string to a DataClass
                     val dataClass = objectMapper.readValue(input, DataClass::class.java)
                     log.info("Deserialized data class: $dataClass")
-                    // Return the DataClass
                     dataClass
                 } catch (e: Exception) {
                     log.error("Could not deserialize data : {}" , jsonString , e)

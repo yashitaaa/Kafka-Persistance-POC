@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ProducerService(private val kafkaTemplate: KafkaTemplate<String, DataClass>) {
-    // Logger for logging the events
+    // Logger
     companion object {
         val log: Logger = LoggerFactory.getLogger(ProducerService::class.java)
     }
@@ -18,7 +18,7 @@ class ProducerService(private val kafkaTemplate: KafkaTemplate<String, DataClass
     // Function to send the message to the Kafka topic
     fun send(topic: String, data: DataClass) {
         log.info("Sending message to topic {}: {}", topic, data)
-        // Send the data to the Kafka topic
+        // Sending the data to the Kafka topic
         kafkaTemplate.send(topic, data).addCallback({
             log.info("Sent message=[{}] with offset=[{}]", data, it?.recordMetadata?.offset())
         }, {

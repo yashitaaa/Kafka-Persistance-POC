@@ -39,9 +39,8 @@ class KafkaController(
     // POST endpoint for executing a KSQL command
     @PostMapping("/execute")
     fun executePostKsqlCommand(@RequestBody ksqlCommand: KsqlCommand): ResponseEntity<String> {
-        // Call the executeKsqlCommand function from the KsqlDBService to execute a KSQL command
+        // Calling executeKsqlCommand function from the KsqlDBService to execute a KSQL command
         val result = ksqlDBService.executeKsqlCommand(ksqlCommand.endpoint, ksqlCommand.ksql, HttpMethod.POST)
-        // Return the result as an HTTP response
         return ResponseEntity.ok(result)
     }
 

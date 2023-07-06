@@ -44,11 +44,10 @@ class KafkaConfiguration {
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             // Setting the unique string that identifies the consumer group this consumer belongs to
             ConsumerConfig.GROUP_ID_CONFIG to "my-group",
-            // Setting the deserializer class for keys. This will convert keys to a particular type.
+            // Setting the deserializer class for keys
             ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
-            // Setting the deserializer class for values. This will convert values to a particular type.
+            // Setting the deserializer class for values
             ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to DataClass.DataClassDeserializer::class.java,
-            // Setting whether the consumer's offset should be periodically committed in the background or not
             ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "true",
             // Setting what to do when there is no initial offset in Kafka or if the current offset does not exist any more on the server
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest"
@@ -78,7 +77,6 @@ class KafkaConfiguration {
     // Create a RestTemplate bean which is used to send HTTP requests.
     @Bean
     fun restTemplate(): RestTemplate {
-        // Returning a new instance of RestTemplate
         return RestTemplate()
     }
 

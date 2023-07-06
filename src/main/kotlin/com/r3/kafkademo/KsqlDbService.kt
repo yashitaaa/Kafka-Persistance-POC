@@ -23,7 +23,7 @@ class KsqlDBService {
     // Function to execute a KSQL command on the KSQL DB
     fun executeKsqlCommand(endpoint: String, ksql: String, method: HttpMethod): String {
 
-        // Creating HttpHeaders instance to set the Content-Type as application/json.
+        // setting the Content-Type header as application/json.
         val headers = HttpHeaders()
         headers.contentType= MediaType.APPLICATION_JSON
 
@@ -34,10 +34,9 @@ class KsqlDBService {
         val entity = HttpEntity(map, headers)
 
         // Making a POST request to the given endpoint with the created entity,
-        // and expecting a response of type String.
+
         val response = restTemplate.postForEntity("$ksqlDbBaseUrl/$endpoint", entity, String::class.java)
 
-        // Returning the response body.
         return response.body!!
     }
 

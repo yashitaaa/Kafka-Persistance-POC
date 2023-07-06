@@ -21,7 +21,6 @@ class ConsumerService @Autowired constructor(
     private val consumerFactory: ConsumerFactory<String, DataClass>,
     private val ksqlDBService: KsqlDBService) {
 
-    // Logger for logging the events
 
     companion object {
         val log: Logger = LoggerFactory.getLogger(ConsumerService::class.java)
