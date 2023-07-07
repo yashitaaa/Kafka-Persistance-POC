@@ -4,6 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
@@ -16,8 +17,28 @@ import org.springframework.web.client.RestTemplate
 
 @Configuration
 class KafkaConfiguration {
-    // Defining the servers to connect to
-    private val bootstrapServers = "localhost:29092"
+  // specifying the application properties to be used
+
+    @Value("\${spring.kafka.bootstrap-servers}")
+    private lateinit var bootstrapServers: String
+
+    @Value("\${spring.kafka.consumer.group-id}")
+    private lateinit var groupId: String
+
+    @Value("\${spring.kafka.consumer.auto-offset-reset}")
+    private lateinit var auto_offset_reset : String
+
+    @Value("\${spring.kafka.producer.key-serializer}")
+    private lateinit var ProducerKeySerializer : String
+
+    @Value("\${spring.kafka.consumer.key-deserializer}")
+    private lateinit var ConsumerKeySerializer : String
+
+    @Value("\${spring.kafka.producer.value-serializer}")
+    private lateinit var ProducerValueSerializer : String
+
+    @Value("\${spring.kafka.consumer.value-deserializer}")
+    private lateinit var ConsumerValueSerializer : String
 
     // Creating a ProducerFactory bean which is responsible for creating Kafka Producer instances
     @Bean
@@ -27,9 +48,9 @@ class KafkaConfiguration {
             // Setting the host and port the producer will use to establish an initial connection to the Kafka cluster
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             // Setting the serializer class for keys. This will convert keys to bytes.
-            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to ProducerKeySerializer,
             // Setting the serializer class for values. This will convert values to bytes.
-            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to DataClass.DataClassSerializer::class.java
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to ProducerValueSerializer
         )
 
         return DefaultKafkaProducerFactory(configProps)
@@ -43,14 +64,14 @@ class KafkaConfiguration {
             // Setting the host and port the consumer will use to establish an initial connection to the Kafka cluster
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             // Setting the unique string that identifies the consumer group this consumer belongs to
-            ConsumerConfig.GROUP_ID_CONFIG to "my-group",
+            ConsumerConfig.GROUP_ID_CONFIG to groupId,
             // Setting the deserializer class for keys
-            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to ConsumerKeySerializer,
             // Setting the deserializer class for values
-            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to DataClass.DataClassDeserializer::class.java,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ConsumerValueSerializer,
             ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "true",
             // Setting what to do when there is no initial offset in Kafka or if the current offset does not exist any more on the server
-            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest"
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to auto_offset_reset
         )
 
         return DefaultKafkaConsumerFactory(configProps)
