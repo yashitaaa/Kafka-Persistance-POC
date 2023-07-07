@@ -32,13 +32,13 @@ class KafkaConfiguration {
     private lateinit var ProducerKeySerializer : String
 
     @Value("\${spring.kafka.consumer.key-deserializer}")
-    private lateinit var ConsumerKeySerializer : String
+    private lateinit var ConsumerKeyDeserializer : String
 
     @Value("\${spring.kafka.producer.value-serializer}")
     private lateinit var ProducerValueSerializer : String
 
     @Value("\${spring.kafka.consumer.value-deserializer}")
-    private lateinit var ConsumerValueSerializer : String
+    private lateinit var ConsumerValueDeserializer : String
 
     // Creating a ProducerFactory bean which is responsible for creating Kafka Producer instances
     @Bean
@@ -66,9 +66,9 @@ class KafkaConfiguration {
             // Setting the unique string that identifies the consumer group this consumer belongs to
             ConsumerConfig.GROUP_ID_CONFIG to groupId,
             // Setting the deserializer class for keys
-            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to ConsumerKeySerializer,
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to ConsumerKeyDeserializer,
             // Setting the deserializer class for values
-            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ConsumerValueSerializer,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ConsumerValueDeserializer,
             ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "true",
             // Setting what to do when there is no initial offset in Kafka or if the current offset does not exist any more on the server
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to auto_offset_reset
